@@ -5,6 +5,7 @@ import {
 } from "../../features/apiSlice";
 import ProductList from "../../components/ProductList/ProductList";
 import SearchBar from "../../components/SearchBar/SearchBar";
+import Pagination from "../../components/Pagination/Pagination";
 import "./Home.css";
 
 const Home: React.FC = () => {
@@ -26,6 +27,11 @@ const Home: React.FC = () => {
   ];
 
   const itemsPerPage = 10;
+  const totalPages = Math.ceil(combinedData.length / itemsPerPage);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -41,6 +47,11 @@ const Home: React.FC = () => {
       {cocktailsLoading && <p>Loading cocktails...</p>}
       <div className="product-list-container">
         <ProductList data={currentItems} type="meal" />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );
