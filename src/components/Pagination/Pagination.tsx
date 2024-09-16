@@ -1,5 +1,6 @@
 import React from "react";
-import "./Pagination.css";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 interface PaginationProps {
   currentPage: number;
@@ -7,52 +8,25 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
 }
 
-const Pagination: React.FC<PaginationProps> = ({
+const Paginate: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
   onPageChange,
 }) => {
+  const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    onPageChange(page);
+  };
+
   return (
-    <div className="pagination">
-      {totalPages > 1 && (
-        <>
-          {currentPage > 1 && (
-            <button
-              onClick={() => onPageChange(currentPage - 1)}
-              className="pagination-button"
-            >
-              &lt;
-            </button>
-          )}
-          {Array.from({ length: totalPages }, (_, index) => {
-            const pageNumber = index + 1;
-            return (
-              <button
-                key={pageNumber}
-                onClick={() => onPageChange(pageNumber)}
-                className={`pagination-button ${
-                  currentPage === pageNumber ? "active" : ""
-                }`}
-                style={{
-                  display: pageNumber === currentPage ? "inline" : "none",
-                }}
-              >
-                {pageNumber}
-              </button>
-            );
-          })}
-          {currentPage < totalPages && (
-            <button
-              onClick={() => onPageChange(currentPage + 1)}
-              className="pagination-button"
-            >
-              &gt;
-            </button>
-          )}
-        </>
-      )}
-    </div>
+    <Stack spacing={2} alignItems="center">
+      <Pagination
+        count={totalPages}
+        page={currentPage}
+        onChange={handleChange}
+        color="primary"
+      />
+    </Stack>
   );
 };
 
-export default Pagination;
+export default Paginate;
