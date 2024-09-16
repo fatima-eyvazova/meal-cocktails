@@ -1,16 +1,25 @@
 import React, { useState } from "react";
 import {
   useFetchMealsQuery,
+  useFetchMealCategoriesQuery,
+} from "../../features/mealSlice";
+import {
   useFetchCocktailsQuery,
-} from "../../features/apiSlice";
+  useFetchCocktailCategoriesQuery,
+} from "../../features/cocktailSlice";
+
 import ProductList from "../../components/ProductList/ProductList";
-import SearchBar from "../../components/SearchBar/SearchBar";
-import Pagination from "../../components/Pagination/Pagination";
-import "./Home.css";
+import Paginate from "../../components/Pagination/Pagination";
+import Header from "../../components/Header/Header";
+import { Button, CircularProgress, Box } from "@mui/material";
 
 const Home: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+
+  const { data: mealCategoriesData } = useFetchMealCategoriesQuery("");
+  const { data: cocktailCategoriesData } = useFetchCocktailCategoriesQuery("");
 
   const {
     data: mealsData,
@@ -26,8 +35,18 @@ const Home: React.FC = () => {
     ...(cocktailsData?.drinks || []),
   ];
 
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(combinedData.length / itemsPerPage);
+  const combinedCategories = [
+    ...(mealCategoriesData?.categories || []),
+    ...(cocktailCategoriesData?.drinks || []),
+  ];
+
+  const filteredData = combinedData.filter((item) => {
+    if (selectedCategory === "all") return true;
+    return item.strCategory === selectedCategory;
+  });
+
+  const itemsPerPage = 8;
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -35,25 +54,46 @@ const Home: React.FC = () => {
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentItems = combinedData.slice(startIndex, endIndex);
+  const currentItems = filteredData.slice(startIndex, endIndex);
 
   return (
-    <div className="home-container">
-      <SearchBar onSearch={setSearchQuery} />
-      <button className="random-button" onClick={() => refetchMeals()}>
+    <Box
+      sx={{
+        padding: 2,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Header
+        onSearch={setSearchQuery}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        categories={combinedCategories}
+      />
+
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => refetchMeals()}
+        sx={{ marginBottom: 2 }}
+      >
         Get Random Meal
-      </button>
-      {mealsLoading && <p>Loading meals...</p>}
-      {cocktailsLoading && <p>Loading cocktails...</p>}
-      <div className="product-list-container">
-        <ProductList data={currentItems} type="meal" />
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
-      </div>
-    </div>
+      </Button>
+
+      {mealsLoading || cocktailsLoading ? (
+        <CircularProgress />
+      ) : (
+        <Box>
+          <ProductList data={currentItems} />
+          <Paginate
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </Box>
+      )}
+    </Box>
   );
 };
 
