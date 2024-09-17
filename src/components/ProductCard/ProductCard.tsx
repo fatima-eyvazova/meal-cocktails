@@ -1,13 +1,34 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
-
-interface ProductCardProps {
-  item: any;
-  type: "meal" | "cocktail";
-}
+import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { addFavorite, removeFavorite } from "../../features/favoritesSlice";
+import { RootState } from "../../store";
+import { ProductCardProps } from "../../types/productTypes";
 
 const ProductCard: React.FC<ProductCardProps> = ({ item, type }) => {
+  const dispatch = useDispatch();
+  const favorites = useSelector(
+    (state: RootState) => state.favorites.favorites
+  );
+
+  const isFavorite = !!favorites.find(
+    (fav) =>
+      (type === "meal" && fav.idMeal === item.idMeal) ||
+      (type === "cocktail" && fav.idDrink === item.idDrink)
+  );
+
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (isFavorite) {
+      dispatch(removeFavorite(item.idMeal || item.idDrink));
+    } else {
+      dispatch(addFavorite(item));
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -37,12 +58,28 @@ const ProductCard: React.FC<ProductCardProps> = ({ item, type }) => {
             image={item.strMealThumb || item.strDrinkThumb}
             alt={item.strMeal || item.strDrink}
           />
-          <CardContent>
-            <Typography variant="h6" noWrap>
-              {item.strMeal || item.strDrink}
-            </Typography>
-          </CardContent>
         </Link>
+
+        <CardContent
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography variant="h6" noWrap>
+            <Link
+              to={`/product/${type}/${item.idMeal || item.idDrink}`}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              {item.strMeal || item.strDrink}
+            </Link>
+          </Typography>
+
+          <Box onClick={handleFavoriteClick} sx={{ cursor: "pointer" }}>
+            {isFavorite ? <FaHeart color="red" /> : <FaRegHeart />}
+          </Box>
+        </CardContent>
       </Card>
     </Box>
   );

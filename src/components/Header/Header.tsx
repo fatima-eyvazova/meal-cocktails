@@ -30,9 +30,9 @@ const Header: React.FC<HeaderProps> = ({
 
       <Link
         href="/favorites"
-        sx={{ marginTop: 2, underline: "none", color: "black", fontSize: 26 }}
+        sx={{ underline: "none", color: "black", fontSize: 26 }}
       >
-        <FaRegHeart />
+        Favorites
       </Link>
     </Box>
   );
