@@ -12,7 +12,14 @@ const ProductList: React.FC<ProductListProps> = ({ data }) => {
       direction="row"
       spacing={2}
       flexWrap="wrap"
-      sx={{ justifyContent: "center", marginBottom: 4 }}
+      sx={{
+        justifyContent: "center",
+        marginBottom: 4,
+        direction: "row",
+        spacing: 2,
+        flexWrap: "wrap",
+        gap: 8,
+      }}
     >
       {data.map((item) => {
         const type = item.idMeal ? "meal" : "cocktail";
