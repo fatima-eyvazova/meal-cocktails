@@ -1,33 +1,52 @@
 import React from "react";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Checkbox,
+} from "@mui/material";
 
 interface CategorySelectProps {
-  selectedCategory: string;
-  setSelectedCategory: (category: string) => void;
+  selectedCategory: string[];
+  setSelectedCategory: (category: string[]) => void;
   categories: any[];
 }
+
+const renderSelectedValue = (selected: string[]) => {
+  return selected.join(", ");
+};
 
 const CategorySelect: React.FC<CategorySelectProps> = ({
   selectedCategory,
   setSelectedCategory,
   categories,
 }) => {
+  const handleCategoryChange = (event: any) => {
+    const value = event.target.value as string[];
+    setSelectedCategory(value);
+  };
+
   return (
     <FormControl sx={{ width: "200px", marginBottom: 2 }}>
       <InputLabel id="category-select-label">Category</InputLabel>
       <Select
         labelId="category-select-label"
+        multiple
         value={selectedCategory}
-        label="Category"
-        onChange={(e) => setSelectedCategory(e.target.value)}
+        onChange={handleCategoryChange}
+        renderValue={renderSelectedValue}
       >
-        <MenuItem value="all">All</MenuItem>
+        <MenuItem value="all">
+          <Checkbox checked={selectedCategory.includes("all")} />
+          All
+        </MenuItem>
         {categories.map((category) => (
-          <MenuItem
-            key={category.strCategory || category.strDrink}
-            value={category.strCategory || category.strDrink}
-          >
-            {category.strCategory || category.strDrink}
+          <MenuItem key={category.strCategory} value={category.strCategory}>
+            <Checkbox
+              checked={selectedCategory.includes(category.strCategory)}
+            />
+            {category.strCategory}
           </MenuItem>
         ))}
       </Select>

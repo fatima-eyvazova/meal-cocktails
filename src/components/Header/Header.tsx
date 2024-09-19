@@ -2,8 +2,7 @@ import React from "react";
 import { Box, Link } from "@mui/material";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import CategorySelect from "../../components/CategorySelect/CategorySelect";
-import { BoxStyle } from "../../constands/index";
-import { FaRegHeart } from "react-icons/fa";
+import { BoxStyle } from "../../constants/index";
 
 interface HeaderProps {
   onSearch: (query: string) => void;
