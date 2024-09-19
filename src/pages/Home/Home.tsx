@@ -2,10 +2,14 @@ import React, { useState, useEffect, useMemo } from "react";
 import {
   useFetchMealsQuery,
   useFetchMealCategoriesQuery,
+  useFetchMealAreasQuery,
+  useFetchMealIngredientsQuery,
 } from "../../features/mealSlice";
 import {
   useFetchCocktailsQuery,
   useFetchCocktailCategoriesQuery,
+  useFetchCocktailAreasQuery,
+  useFetchCocktailIngredientsQuery,
 } from "../../features/cocktailSlice";
 
 import ProductList from "../../components/ProductList/ProductList";
@@ -17,15 +21,23 @@ const Home: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [selectedCategory, setSelectedCategory] = useState<string[]>(["all"]);
+  const [selectedAreas, setSelectedAreas] = useState<string[]>(["all"]);
+  const [selectedIngredients, setSelectedIngredients] = useState<string[]>([
+    "all",
+  ]);
 
   const { data: mealCategoriesData } = useFetchMealCategoriesQuery("");
   const { data: cocktailCategoriesData } = useFetchCocktailCategoriesQuery("");
+  const { data: mealAreasData } = useFetchMealAreasQuery();
+  const { data: mealIngredientsData } = useFetchMealIngredientsQuery();
+  const { data: cocktailIngredientsData } = useFetchCocktailIngredientsQuery();
+  const { data: cocktailAreasData } = useFetchCocktailAreasQuery();
 
   const mealsQuery = useFetchMealsQuery(searchQuery, {
-    skip: selectedCategory.length === 0,
+    skip: selectedCategory.length === 0 && selectedAreas.length === 0,
   });
   const cocktailsQuery = useFetchCocktailsQuery(searchQuery, {
-    skip: selectedCategory.length === 0,
+    skip: selectedCategory.length === 0 && selectedAreas.length === 0,
   });
 
   const combinedData = useMemo(() => {
@@ -41,14 +53,39 @@ const Home: React.FC = () => {
     ];
   }, [mealCategoriesData, cocktailCategoriesData]);
 
+  const combinedIngredients = useMemo(() => {
+    return [
+      ...(mealIngredientsData?.meals || []),
+      ...(cocktailIngredientsData?.drinks || []),
+    ];
+  }, [mealIngredientsData, cocktailIngredientsData]);
+
+  const combinedAreas = useMemo(() => {
+    const mealAreas = mealAreasData?.meals || [];
+    const cocktailAreas = cocktailAreasData?.drinks || [];
+    return ["all", ...mealAreas, ...cocktailAreas];
+  }, [mealAreasData, cocktailAreasData]);
+
   const filteredData = useMemo(() => {
-    if (selectedCategory.includes("all") || selectedCategory.length === 0) {
-      return combinedData;
+    let data = combinedData;
+
+    if (!selectedCategory.includes("all") && selectedCategory.length > 0) {
+      data = data.filter((item) => selectedCategory.includes(item.strCategory));
     }
-    return combinedData.filter((item) =>
-      selectedCategory.includes(item.strCategory)
-    );
-  }, [combinedData, selectedCategory]);
+    if (!selectedAreas.includes("all") && selectedAreas.length > 0) {
+      data = data.filter((item) => selectedAreas.includes(item.strArea));
+    }
+    if (
+      !selectedIngredients.includes("all") &&
+      selectedIngredients.length > 0
+    ) {
+      data = data.filter((item) =>
+        selectedIngredients.includes(item.strIngredient1)
+      );
+    }
+
+    return data;
+  }, [combinedData, selectedCategory, selectedAreas, selectedIngredients]);
 
   const itemsPerPage = 8;
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -59,11 +96,15 @@ const Home: React.FC = () => {
   );
 
   useEffect(() => {
-    if (selectedCategory.length > 0) {
+    if (selectedCategory.length > 0 || selectedAreas.length > 0) {
       mealsQuery.refetch();
       cocktailsQuery.refetch();
     }
-  }, [selectedCategory]);
+    if (selectedIngredients.length > 0) {
+      mealsQuery.refetch();
+      cocktailsQuery.refetch();
+    }
+  }, [selectedCategory, selectedAreas, selectedIngredients]);
 
   return (
     <Box
@@ -79,6 +120,12 @@ const Home: React.FC = () => {
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
         categories={combinedCategories}
+        areas={combinedAreas}
+        ingredients={combinedIngredients}
+        selectedAreas={selectedAreas}
+        setSelectedAreas={setSelectedAreas}
+        selectedIngredients={selectedIngredients}
+        setSelectedIngredients={setSelectedIngredients}
       />
 
       <Button variant="contained" color="primary" sx={{ marginBottom: 2 }}>

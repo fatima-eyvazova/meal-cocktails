@@ -21,6 +21,12 @@ export const mealSlice = createApi({
     fetchMealCategories: builder.query({
       query: () => `categories.php`,
     }),
+    fetchMealAreas: builder.query({
+      query: () => `list.php?a=list`,
+    }),
+    fetchMealIngredients: builder.query({
+      query: () => "list.php?i=list",
+    }),
   }),
 });
 
@@ -29,4 +35,6 @@ export const {
   useFetchMealByIdQuery,
   useFetchRandomMealQuery,
   useFetchMealCategoriesQuery,
+  useFetchMealAreasQuery,
+  useFetchMealIngredientsQuery,
 } = mealSlice;

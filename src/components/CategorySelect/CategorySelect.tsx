@@ -14,7 +14,7 @@ interface CategorySelectProps {
 }
 
 const renderSelectedValue = (selected: string[]) => {
-  return selected.join(", ");
+  return selected.length === 0 ? "None" : selected.join(", ");
 };
 
 const CategorySelect: React.FC<CategorySelectProps> = ({
@@ -24,11 +24,18 @@ const CategorySelect: React.FC<CategorySelectProps> = ({
 }) => {
   const handleCategoryChange = (event: any) => {
     const value = event.target.value as string[];
-    setSelectedCategory(value);
+
+    if (value.includes("all")) {
+      setSelectedCategory(["all"]);
+    } else {
+      setSelectedCategory(value);
+    }
   };
 
+  const allSelected = selectedCategory.includes("all");
+
   return (
-    <FormControl sx={{ width: "200px", marginBottom: 2 }}>
+    <FormControl sx={{ width: "200px" }}>
       <InputLabel id="category-select-label">Category</InputLabel>
       <Select
         labelId="category-select-label"
@@ -38,11 +45,15 @@ const CategorySelect: React.FC<CategorySelectProps> = ({
         renderValue={renderSelectedValue}
       >
         <MenuItem value="all">
-          <Checkbox checked={selectedCategory.includes("all")} />
+          <Checkbox checked={allSelected} />
           All
         </MenuItem>
         {categories.map((category) => (
-          <MenuItem key={category.strCategory} value={category.strCategory}>
+          <MenuItem
+            key={category.strCategory}
+            value={category.strCategory}
+            disabled={allSelected}
+          >
             <Checkbox
               checked={selectedCategory.includes(category.strCategory)}
             />

@@ -17,6 +17,12 @@ export const cocktailSlice = createApi({
     fetchCocktailCategories: builder.query({
       query: () => `list.php?c=list`,
     }),
+    fetchCocktailAreas: builder.query({
+      query: () => `list.php?a=list`,
+    }),
+    fetchCocktailIngredients: builder.query({
+      query: () => "list.php?i=list",
+    }),
   }),
 });
 
@@ -25,4 +31,6 @@ export const {
   useFetchCocktailByIdQuery,
   useFetchRandomCocktailQuery,
   useFetchCocktailCategoriesQuery,
+  useFetchCocktailAreasQuery,
+  useFetchCocktailIngredientsQuery,
 } = cocktailSlice;
