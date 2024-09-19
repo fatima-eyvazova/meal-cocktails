@@ -4,9 +4,11 @@ import {
   useFetchMealCategoriesQuery,
   useFetchMealAreasQuery,
   useFetchMealIngredientsQuery,
+  useFetchRandomMealQuery,
 } from "../../features/mealSlice";
 import {
   useFetchCocktailsQuery,
+  useFetchRandomCocktailQuery,
   useFetchCocktailCategoriesQuery,
   useFetchCocktailAreasQuery,
   useFetchCocktailIngredientsQuery,
@@ -16,10 +18,14 @@ import ProductList from "../../components/ProductList/ProductList";
 import Paginate from "../../components/Pagination/Pagination";
 import Header from "../../components/Header/Header";
 import { Button, CircularProgress, Box } from "@mui/material";
+import RandomModal from "../../components/RandomModal/RandomModal";
 
 const Home: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [randomMeal, setRandomMeal] = useState<any>(null);
+  const [randomCocktail, setRandomCocktail] = useState<any>(null);
   const [selectedCategory, setSelectedCategory] = useState<string[]>(["all"]);
   const [selectedAreas, setSelectedAreas] = useState<string[]>(["all"]);
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([
@@ -39,12 +45,28 @@ const Home: React.FC = () => {
   const cocktailsQuery = useFetchCocktailsQuery(searchQuery, {
     skip: selectedCategory.length === 0 && selectedAreas.length === 0,
   });
+  const randomMealQuery = useFetchRandomMealQuery();
+  const randomCocktailQuery = useFetchRandomCocktailQuery();
 
   const combinedData = useMemo(() => {
     const meals = mealsQuery.data?.meals || [];
     const cocktails = cocktailsQuery.data?.drinks || [];
     return [...meals, ...cocktails];
   }, [mealsQuery.data, cocktailsQuery.data]);
+
+  const handleGetRandom = async () => {
+    setOpenModal(true);
+
+    await randomMealQuery.refetch();
+    await randomCocktailQuery.refetch();
+
+    if (randomMealQuery.data) {
+      setRandomMeal(randomMealQuery.data.meals[0]);
+    }
+    if (randomCocktailQuery.data) {
+      setRandomCocktail(randomCocktailQuery.data.drinks[0]);
+    }
+  };
 
   const combinedCategories = useMemo(() => {
     return [
@@ -127,11 +149,14 @@ const Home: React.FC = () => {
         selectedIngredients={selectedIngredients}
         setSelectedIngredients={setSelectedIngredients}
       />
-
-      <Button variant="contained" color="primary" sx={{ marginBottom: 2 }}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleGetRandom}
+        sx={{ marginBottom: 2 }}
+      >
         Get Random Meal
       </Button>
-
       {mealsQuery.isLoading || cocktailsQuery.isLoading ? (
         <CircularProgress />
       ) : (
@@ -144,6 +169,12 @@ const Home: React.FC = () => {
           />
         </Box>
       )}
+      <RandomModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        meal={randomMeal}
+        cocktail={randomCocktail}
+      />
     </Box>
   );
 };
