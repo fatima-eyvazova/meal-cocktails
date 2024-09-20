@@ -19,6 +19,7 @@ import Paginate from "../../components/Pagination/Pagination";
 import Header from "../../components/Header/Header";
 import { Button, CircularProgress, Box } from "@mui/material";
 import RandomModal from "../../components/RandomModal/RandomModal";
+import { HomeBox } from "../../constants";
 
 const Home: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -35,9 +36,9 @@ const Home: React.FC = () => {
   const { data: mealCategoriesData } = useFetchMealCategoriesQuery("");
   const { data: cocktailCategoriesData } = useFetchCocktailCategoriesQuery("");
   const { data: mealAreasData } = useFetchMealAreasQuery();
+  const { data: cocktailAreasData } = useFetchCocktailAreasQuery();
   const { data: mealIngredientsData } = useFetchMealIngredientsQuery();
   const { data: cocktailIngredientsData } = useFetchCocktailIngredientsQuery();
-  const { data: cocktailAreasData } = useFetchCocktailAreasQuery();
 
   const mealsQuery = useFetchMealsQuery(searchQuery, {
     skip: selectedCategory.length === 0 && selectedAreas.length === 0,
@@ -77,8 +78,14 @@ const Home: React.FC = () => {
 
   const combinedIngredients = useMemo(() => {
     return [
-      ...(mealIngredientsData?.meals || []),
-      ...(cocktailIngredientsData?.drinks || []),
+      ...(mealIngredientsData?.meals.map((item: { strIngredient: string }) => ({
+        strIngredient: item.strIngredient,
+      })) || []),
+      ...(cocktailIngredientsData?.drinks.map(
+        (item: { strIngredient1: string }) => ({
+          strIngredient: item.strIngredient1,
+        })
+      ) || []),
     ];
   }, [mealIngredientsData, cocktailIngredientsData]);
 
@@ -129,14 +136,7 @@ const Home: React.FC = () => {
   }, [selectedCategory, selectedAreas, selectedIngredients]);
 
   return (
-    <Box
-      sx={{
-        padding: 2,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
+    <Box sx={HomeBox}>
       <Header
         onSearch={setSearchQuery}
         selectedCategory={selectedCategory}

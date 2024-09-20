@@ -1,6 +1,11 @@
 import React from "react";
 import { Modal, Box, Typography, Button } from "@mui/material";
-import { RandomBox } from "../../constants";
+import {
+  ButtonStyle,
+  ImageStyle,
+  ModalStyle,
+  RandomBox,
+} from "../../constants";
 
 interface RandomMealCocktailModalProps {
   open: boolean;
@@ -8,18 +13,6 @@ interface RandomMealCocktailModalProps {
   meal: any;
   cocktail: any;
 }
-
-const modalStyle = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "50vw",
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
 
 const RandomModal: React.FC<RandomMealCocktailModalProps> = ({
   open,
@@ -29,12 +22,8 @@ const RandomModal: React.FC<RandomMealCocktailModalProps> = ({
 }) => {
   return (
     <Modal open={open} onClose={onClose}>
-      <Box sx={modalStyle}>
-        <Button
-          onClick={onClose}
-          variant="outlined"
-          sx={{ mt: 2, position: "absolute", right: "15px", top: 0 }}
-        >
+      <Box sx={ModalStyle}>
+        <Button onClick={onClose} variant="outlined" sx={ButtonStyle}>
           X
         </Button>
         <Typography variant="h6" component="h2">
@@ -45,11 +34,7 @@ const RandomModal: React.FC<RandomMealCocktailModalProps> = ({
             <img
               src={meal.strMealThumb}
               alt={meal.strMeal}
-              style={{
-                width: "200px",
-                borderRadius: "8px",
-                marginBottom: "8px",
-              }}
+              style={ImageStyle}
             />
             <Typography sx={{ mt: 2, fontSize: "20px" }}>
               {meal.strMeal} - {meal.strCategory}
@@ -64,11 +49,7 @@ const RandomModal: React.FC<RandomMealCocktailModalProps> = ({
             <img
               src={cocktail.strDrinkThumb}
               alt={cocktail.strDrink}
-              style={{
-                width: "200px",
-                borderRadius: "8px",
-                marginBottom: "8px",
-              }}
+              style={ImageStyle}
             />
             <Typography sx={{ mt: 2, fontSize: "20px" }}>
               {cocktail.strDrink} - {cocktail.strCategory}

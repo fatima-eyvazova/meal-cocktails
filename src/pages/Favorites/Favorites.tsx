@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Box, Typography } from "@mui/material";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import { RootState } from "../../store";
+import { FavoritesContainerStyle, FavoritesListStyle } from "../../constants";
 
 const FavoritesPage: React.FC = () => {
   const favorites = useSelector(
@@ -14,10 +15,8 @@ const FavoritesPage: React.FC = () => {
   }
 
   return (
-    <Box
-      sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
-    >
-      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 5, width: "80vw" }}>
+    <Box sx={FavoritesContainerStyle}>
+      <Box sx={FavoritesListStyle}>
         {favorites.map((item: any) => (
           <ProductCard
             key={item.idMeal || item.idDrink}

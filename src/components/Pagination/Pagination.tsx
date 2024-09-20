@@ -18,7 +18,7 @@ const Paginate: React.FC<PaginationProps> = ({
   };
 
   return (
-    <Stack spacing={2} alignItems="center">
+    <Stack sx={{ display: "flex", alignItems: "center" }}>
       <Pagination
         count={totalPages}
         page={currentPage}

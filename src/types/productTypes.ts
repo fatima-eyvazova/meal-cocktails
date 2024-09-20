@@ -16,3 +16,8 @@ export interface ProductCardProps {
   item: any;
   type: "meal" | "cocktail";
 }
+
+export interface FavoriteType {
+  idMeal?: string;
+  idDrink?: string;
+}

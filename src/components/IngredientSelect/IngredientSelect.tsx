@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 
 interface IngredientSelectProps {
-  ingredients: { strIngredient1: string }[];
+  ingredients: { strIngredient: string }[];
   selectedIngredients: string[];
   setSelectedIngredients: (ingredients: string[]) => void;
 }
@@ -35,11 +35,6 @@ const IngredientSelect: React.FC<IngredientSelectProps> = ({
     }
   };
 
-  const filteredIngredients = ingredients.filter(
-    (ingredient) =>
-      ingredient.strIngredient1 && ingredient.strIngredient1.trim() !== ""
-  );
-
   return (
     <Box sx={{ width: "10vw" }}>
       <FormControl fullWidth>
@@ -56,24 +51,20 @@ const IngredientSelect: React.FC<IngredientSelectProps> = ({
             <ListItemText primary="All" />
           </MenuItem>
 
-          {filteredIngredients.length > 0 ? (
-            filteredIngredients.map((ingredient) => (
-              <MenuItem
-                key={ingredient.strIngredient1}
-                value={ingredient.strIngredient1}
-                disabled={selectedIngredients.includes("all")}
-              >
-                <Checkbox
-                  checked={
-                    selectedIngredients.indexOf(ingredient.strIngredient1) > -1
-                  }
-                />
-                <ListItemText primary={ingredient.strIngredient1} />
-              </MenuItem>
-            ))
-          ) : (
-            <MenuItem disabled>No ingredients available</MenuItem>
-          )}
+          {ingredients.map((ingredient, index) => (
+            <MenuItem
+              key={index}
+              value={ingredient.strIngredient}
+              disabled={selectedIngredients.includes("all")}
+            >
+              <Checkbox
+                checked={
+                  selectedIngredients.indexOf(ingredient.strIngredient) > -1
+                }
+              />
+              <ListItemText primary={ingredient.strIngredient} />
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     </Box>

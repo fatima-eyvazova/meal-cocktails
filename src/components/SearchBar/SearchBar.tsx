@@ -27,7 +27,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   };
 
   return (
-    <Box sx={{ width: "20vw" }}>
+    <Box sx={{ width: "15vw" }}>
       <TextField
         fullWidth
         variant="outlined"

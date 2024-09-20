@@ -9,6 +9,7 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
+import { CardStyle, DetailBoxStyle } from "../../constants";
 
 const Detail: React.FC = () => {
   const { type, id } = useParams<{ type: string; id: string }>();
@@ -30,26 +31,8 @@ const Detail: React.FC = () => {
   if (!product) return <Typography>Product not found.</Typography>;
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: { xs: "column", md: "row" },
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 2,
-        gap: 2,
-        height: "100vh",
-      }}
-    >
-      <Card
-        sx={{
-          width: { xs: "100%", md: "50%" },
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          boxShadow: 3,
-        }}
-      >
+    <Box sx={DetailBoxStyle}>
+      <Card sx={CardStyle}>
         <CardMedia
           component="img"
           image={product.strMealThumb || product.strDrinkThumb}

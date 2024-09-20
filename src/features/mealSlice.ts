@@ -5,6 +5,7 @@ export const mealSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: MEAL_BASE_URL,
   }),
+
   endpoints: (builder) => ({
     fetchMeals: builder.query({
       query: (searchQuery = "") => `search.php?s=${searchQuery}`,
