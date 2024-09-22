@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
   Box,
   FormControl,
@@ -9,30 +9,33 @@ import {
   ListItemText,
   OutlinedInput,
 } from "@mui/material";
-
-interface IngredientSelectProps {
-  ingredients: { strIngredient: string }[];
-  selectedIngredients: string[];
-  setSelectedIngredients: (ingredients: string[]) => void;
-}
+import { IngredientSelectProps } from "../../types/productTypes";
 
 const IngredientSelect: React.FC<IngredientSelectProps> = ({
   ingredients,
   selectedIngredients,
   setSelectedIngredients,
 }) => {
-  const handleChange = (event: any) => {
-    const {
-      target: { value },
-    } = event;
+  const handleChange = useCallback(
+    (event: any) => {
+      const {
+        target: { value },
+      } = event;
 
-    if (value.includes("all")) {
-      setSelectedIngredients(["all"]);
-    } else {
-      setSelectedIngredients(
-        typeof value === "string" ? value.split(",") : value
-      );
-    }
+      if (value.includes("all")) {
+        setSelectedIngredients(["all"]);
+      } else {
+        setSelectedIngredients(
+          typeof value === "string" ? value.split(",") : value
+        );
+      }
+    },
+    [setSelectedIngredients]
+  );
+
+  const renderSelectedValue = (selected: string[]) => {
+    if (selected.includes("all")) return "All";
+    return selected.length === 0 ? "None" : selected.join(", ");
   };
 
   return (
@@ -44,7 +47,7 @@ const IngredientSelect: React.FC<IngredientSelectProps> = ({
           value={selectedIngredients}
           onChange={handleChange}
           input={<OutlinedInput label="Ingredients" />}
-          renderValue={(selected) => selected.join(", ")}
+          renderValue={renderSelectedValue}
         >
           <MenuItem value="all">
             <Checkbox checked={selectedIngredients.includes("all")} />

@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import useDebounce from "../../hooks/useDebounce";
 import { Box, TextField } from "@mui/material";
-
-interface SearchBarProps {
-  onSearch: (query: string) => void;
-}
+import { SearchBarProps } from "../../types/productTypes";
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [query, setQuery] = useState<string>("");

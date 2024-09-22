@@ -20,6 +20,9 @@ import Header from "../../components/Header/Header";
 import { Button, CircularProgress, Box } from "@mui/material";
 import RandomModal from "../../components/RandomModal/RandomModal";
 import { HomeBox } from "../../constants";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@reduxjs/toolkit/query";
+import { addFavorite, removeFavorite } from "../../features/favoritesSlice";
 
 const Home: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -32,6 +35,11 @@ const Home: React.FC = () => {
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([
     "all",
   ]);
+
+  const dispatch = useDispatch();
+  const favorites = useSelector(
+    (state: RootState) => state.favorites.favorites
+  );
 
   const { data: mealCategoriesData } = useFetchMealCategoriesQuery("");
   const { data: cocktailCategoriesData } = useFetchCocktailCategoriesQuery("");
@@ -77,16 +85,21 @@ const Home: React.FC = () => {
   }, [mealCategoriesData, cocktailCategoriesData]);
 
   const combinedIngredients = useMemo(() => {
-    return [
-      ...(mealIngredientsData?.meals.map((item: { strIngredient: string }) => ({
-        strIngredient: item.strIngredient,
-      })) || []),
-      ...(cocktailIngredientsData?.drinks.map(
-        (item: { strIngredient1: string }) => ({
+    const mealIngredients =
+      mealIngredientsData?.meals
+        ?.map((item: { strIngredient: string }) => ({
+          strIngredient: item.strIngredient,
+        }))
+        .slice(0, 15) || [];
+
+    const cocktailIngredients =
+      cocktailIngredientsData?.drinks
+        ?.map((item: { strIngredient1: string }) => ({
           strIngredient: item.strIngredient1,
-        })
-      ) || []),
-    ];
+        }))
+        .slice(0, 15) || [];
+
+    return [...mealIngredients, ...cocktailIngredients];
   }, [mealIngredientsData, cocktailIngredientsData]);
 
   const combinedAreas = useMemo(() => {
@@ -135,6 +148,14 @@ const Home: React.FC = () => {
     }
   }, [selectedCategory, selectedAreas, selectedIngredients]);
 
+  const handleAddFavorite = (item: any) => {
+    dispatch(addFavorite(item));
+  };
+
+  const handleRemoveFavorite = (id: string | number) => {
+    dispatch(removeFavorite(id));
+  };
+
   return (
     <Box sx={HomeBox}>
       <Header
@@ -161,7 +182,12 @@ const Home: React.FC = () => {
         <CircularProgress />
       ) : (
         <Box>
-          <ProductList data={currentItems} />
+          <ProductList
+            data={currentItems}
+            favorites={favorites}
+            addFavorite={handleAddFavorite}
+            removeFavorite={handleRemoveFavorite}
+          />
           <Paginate
             currentPage={currentPage}
             totalPages={totalPages}

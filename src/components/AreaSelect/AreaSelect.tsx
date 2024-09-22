@@ -7,12 +7,7 @@ import {
   Checkbox,
   ListItemText,
 } from "@mui/material";
-
-interface AreaSelectProps {
-  areas: { strArea?: string }[];
-  selectedAreas: string[];
-  setSelectedAreas: React.Dispatch<React.SetStateAction<string[]>>;
-}
+import { AreaSelectProps } from "../../types/productTypes";
 
 const renderSelectedValue = (selected: string[]) => {
   if (selected.includes("all")) return "all";

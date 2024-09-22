@@ -35,7 +35,7 @@ export const HeaderContainer = {
   alignItems: "center",
   justifyContent: "space-between",
   marginBottom: 4,
-  width: "80vw",
+  width: "77vw",
 };
 
 export const LinkFavorites = {

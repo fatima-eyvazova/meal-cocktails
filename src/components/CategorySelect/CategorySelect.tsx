@@ -6,12 +6,7 @@ import {
   Select,
   Checkbox,
 } from "@mui/material";
-
-interface CategorySelectProps {
-  selectedCategory: string[];
-  setSelectedCategory: (category: string[]) => void;
-  categories: any[];
-}
+import { CategorySelectProps } from "../../types/productTypes";
 
 const renderSelectedValue = (selected: string[]) => {
   return selected.length === 0 ? "None" : selected.join(", ");

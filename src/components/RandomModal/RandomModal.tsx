@@ -6,13 +6,7 @@ import {
   ModalStyle,
   RandomBox,
 } from "../../constants";
-
-interface RandomMealCocktailModalProps {
-  open: boolean;
-  onClose: () => void;
-  meal: any;
-  cocktail: any;
-}
+import { RandomMealCocktailModalProps } from "../../types/productTypes";
 
 const RandomModal: React.FC<RandomMealCocktailModalProps> = ({
   open,

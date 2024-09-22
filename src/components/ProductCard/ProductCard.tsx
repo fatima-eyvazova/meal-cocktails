@@ -1,10 +1,7 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
-import { addFavorite, removeFavorite } from "../../features/favoritesSlice";
-import { RootState } from "../../store";
 import { FavoriteType, ProductCardProps } from "../../types/productTypes";
 import {
   ProductCardBox,
@@ -13,12 +10,13 @@ import {
   ProductCardMedia,
 } from "../../constants";
 
-const ProductCard: React.FC<ProductCardProps> = ({ item, type }) => {
-  const dispatch = useDispatch();
-  const favorites = useSelector(
-    (state: RootState) => state.favorites.favorites
-  );
-
+const ProductCard: React.FC<ProductCardProps> = ({
+  item,
+  type,
+  favorites,
+  addFavorite,
+  removeFavorite,
+}) => {
   const isFavorite = !!favorites.find(
     (fav: FavoriteType) =>
       (type === "meal" && fav.idMeal === item.idMeal) ||
@@ -29,9 +27,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ item, type }) => {
     e.stopPropagation();
 
     if (isFavorite) {
-      dispatch(removeFavorite(item.idMeal || item.idDrink));
+      removeFavorite(item.idMeal || item.idDrink);
     } else {
-      dispatch(addFavorite(item));
+      addFavorite(item);
     }
   };
 

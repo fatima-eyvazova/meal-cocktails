@@ -2,12 +2,14 @@ import React from "react";
 import { Stack } from "@mui/material";
 import ProductCard from "../ProductCard/ProductCard";
 import { ProductListStack } from "../../constants";
+import { ProductListProps } from "../../types/productTypes";
 
-interface ProductListProps {
-  data: any[];
-}
-
-const ProductList: React.FC<ProductListProps> = ({ data }) => {
+const ProductList: React.FC<ProductListProps> = ({
+  data,
+  favorites,
+  addFavorite,
+  removeFavorite,
+}) => {
   return (
     <Stack sx={ProductListStack}>
       {data.map((item) => {
@@ -17,6 +19,9 @@ const ProductList: React.FC<ProductListProps> = ({ data }) => {
             key={item.idMeal || item.idDrink}
             item={item}
             type={type}
+            favorites={favorites}
+            addFavorite={addFavorite}
+            removeFavorite={removeFavorite}
           />
         );
       })}
