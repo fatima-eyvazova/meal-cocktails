@@ -6,7 +6,7 @@ import { RootState } from "../../store";
 import { FavoritesContainerStyle, FavoritesListStyle } from "../../constants";
 import { addFavorite, removeFavorite } from "../../features/favoritesSlice";
 
-const FavoritesPage: React.FC = () => {
+const Favorites: React.FC = () => {
   const favorites = useSelector(
     (state: RootState) => state.favorites.favorites
   );
@@ -39,4 +39,4 @@ const FavoritesPage: React.FC = () => {
   );
 };
 
-export default FavoritesPage;
+export default Favorites;
