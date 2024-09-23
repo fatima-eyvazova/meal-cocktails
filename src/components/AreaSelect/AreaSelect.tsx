@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { useCallback, useMemo } from "react";
 import {
   FormControl,
   InputLabel,
@@ -10,62 +10,61 @@ import {
 import { SelectChangeEvent } from "@mui/material/Select";
 import { AreaSelectProps } from "../../types/productTypes";
 
-const renderSelectedValue = (selected: string[]) => {
-  if (selected.includes("all")) return "all";
-  return selected.length === 0 ? "None" : selected.join(", ");
-};
+const AreaSelect: React.FC<AreaSelectProps> = React.memo(
+  ({ areas, selectedAreas, setSelectedAreas }) => {
+    const renderSelectedValue = useCallback((selected: string[]) => {
+      if (selected.includes("all")) return "all";
+      return selected.length === 0 ? "None" : selected.join(", ");
+    }, []);
 
-type HandleChangeType = (
-  event: SelectChangeEvent<string[]>,
-  child: ReactNode
-) => void;
+    const handleAreaChange = useCallback(
+      (event: SelectChangeEvent<string[]>) => {
+        const value = event.target.value as string[];
 
-const AreaSelect: React.FC<AreaSelectProps> = ({
-  areas,
-  selectedAreas,
-  setSelectedAreas,
-}) => {
-  const handleAreaChange: HandleChangeType = (event) => {
-    const value = event.target.value as string[];
+        if (value.includes("all")) {
+          setSelectedAreas(["all"]);
+        } else {
+          setSelectedAreas(value);
+        }
+      },
+      [setSelectedAreas]
+    );
 
-    if (value.includes("all")) {
-      setSelectedAreas(["all"]);
-    } else {
-      setSelectedAreas(value);
-    }
-  };
+    const filteredAreas = useMemo(() => {
+      return areas.filter((area) => area.strArea);
+    }, [areas]);
 
-  const filteredAreas = areas.filter((area) => area.strArea);
-  const allSelected = selectedAreas.includes("all");
+    const allSelected = selectedAreas.includes("all");
 
-  return (
-    <FormControl sx={{ width: "200px" }}>
-      <InputLabel id="area-select-label">Area</InputLabel>
-      <Select
-        labelId="area-select-label"
-        multiple
-        value={selectedAreas}
-        onChange={handleAreaChange}
-        renderValue={renderSelectedValue}
-      >
-        <MenuItem key="all" value="all">
-          <Checkbox checked={allSelected} />
-          <ListItemText primary="All" />
-        </MenuItem>
-
-        {filteredAreas.map((area) => (
-          <MenuItem
-            key={area.strArea}
-            value={area.strArea}
-            disabled={allSelected}
-          >
-            <Checkbox checked={selectedAreas.includes(area.strArea!)} />
-            <ListItemText primary={area.strArea} />
+    return (
+      <FormControl sx={{ width: "200px" }}>
+        <InputLabel id="area-select-label">Area</InputLabel>
+        <Select
+          labelId="area-select-label"
+          multiple
+          value={selectedAreas}
+          onChange={handleAreaChange}
+          renderValue={renderSelectedValue}
+        >
+          <MenuItem key="all" value="all">
+            <Checkbox checked={allSelected} />
+            <ListItemText primary="All" />
           </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  );
-};
+
+          {filteredAreas.map((area) => (
+            <MenuItem
+              key={area.strArea}
+              value={area.strArea}
+              disabled={allSelected}
+            >
+              <Checkbox checked={selectedAreas.includes(area.strArea!)} />
+              <ListItemText primary={area.strArea} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    );
+  }
+);
 
 export default AreaSelect;

@@ -3,7 +3,7 @@ import useDebounce from "../../hooks/useDebounce";
 import { Box, TextField } from "@mui/material";
 import { SearchBarProps } from "../../types/productTypes";
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
+const SearchBar: React.FC<SearchBarProps> = React.memo(({ onSearch }) => {
   const [query, setQuery] = useState<string>("");
   const debouncedQuery = useDebounce(query, 1000);
 
@@ -34,6 +34,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
       />
     </Box>
   );
-};
+});
 
 export default SearchBar;

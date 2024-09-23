@@ -28,5 +28,4 @@ const ProductList: React.FC<ProductListProps> = ({
     </Stack>
   );
 };
-
 export default ProductList;
