@@ -43,10 +43,11 @@ const Home: React.FC = () => {
 
   const { data: mealCategoriesData } = useFetchMealCategoriesQuery("");
   const { data: cocktailCategoriesData } = useFetchCocktailCategoriesQuery("");
-  const { data: mealAreasData } = useFetchMealAreasQuery();
-  const { data: cocktailAreasData } = useFetchCocktailAreasQuery();
-  const { data: mealIngredientsData } = useFetchMealIngredientsQuery();
-  const { data: cocktailIngredientsData } = useFetchCocktailIngredientsQuery();
+  const { data: mealAreasData } = useFetchMealAreasQuery("");
+  const { data: cocktailAreasData } = useFetchCocktailAreasQuery("");
+  const { data: mealIngredientsData } = useFetchMealIngredientsQuery("");
+  const { data: cocktailIngredientsData } =
+    useFetchCocktailIngredientsQuery("");
 
   const mealsQuery = useFetchMealsQuery(searchQuery, {
     skip: selectedCategory.length === 0 && selectedAreas.length === 0,
@@ -54,8 +55,8 @@ const Home: React.FC = () => {
   const cocktailsQuery = useFetchCocktailsQuery(searchQuery, {
     skip: selectedCategory.length === 0 && selectedAreas.length === 0,
   });
-  const randomMealQuery = useFetchRandomMealQuery();
-  const randomCocktailQuery = useFetchRandomCocktailQuery();
+  const randomMealQuery = useFetchRandomMealQuery("");
+  const randomCocktailQuery = useFetchRandomCocktailQuery("");
 
   const combinedData = useMemo(() => {
     const meals = mealsQuery.data?.meals || [];

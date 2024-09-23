@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import {
   FormControl,
   InputLabel,
@@ -7,20 +7,21 @@ import {
   Checkbox,
   ListItemText,
 } from "@mui/material";
+import { SelectChangeEvent } from "@mui/material/Select";
 import { AreaSelectProps } from "../../types/productTypes";
 
 const renderSelectedValue = (selected: string[]) => {
   if (selected.includes("all")) return "all";
   return selected.length === 0 ? "None" : selected.join(", ");
 };
-
+type a = (event: SelectChangeEvent<string[]>, child: ReactNode) => void;
 const AreaSelect: React.FC<AreaSelectProps> = ({
   areas,
   selectedAreas,
   setSelectedAreas,
 }) => {
-  const handleAreaChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    const value = event.target.value as string[];
+  const handleAreaChange: a = (event) => {
+    const value = event?.target?.value;
 
     if (value.includes("all")) {
       setSelectedAreas(["all"]);
