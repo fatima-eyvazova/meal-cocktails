@@ -138,13 +138,17 @@ const Home: React.FC = () => {
   );
 
   useEffect(() => {
-    if (selectedCategory.length > 0 || selectedAreas.length > 0) {
-      mealsQuery.refetch();
-      cocktailsQuery.refetch();
-    }
-    if (selectedIngredients.length > 0) {
-      mealsQuery.refetch();
-      cocktailsQuery.refetch();
+    if (
+      selectedCategory.length > 0 ||
+      selectedAreas.length > 0 ||
+      selectedIngredients.length > 0
+    ) {
+      if (mealsQuery.isFetched) {
+        mealsQuery.refetch();
+      }
+      if (cocktailsQuery.isFetched) {
+        cocktailsQuery.refetch();
+      }
     }
   }, [selectedCategory, selectedAreas, selectedIngredients]);
 
