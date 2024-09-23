@@ -152,6 +152,8 @@ const Home: React.FC = () => {
     dispatch(removeFavorite(id));
   };
 
+  const handleCloseModal = () => setOpenModal(false);
+
   return (
     <Box sx={HomeBox}>
       <Header
@@ -193,7 +195,7 @@ const Home: React.FC = () => {
       )}
       <RandomModal
         open={openModal}
-        onClose={() => setOpenModal(false)}
+        onClose={handleCloseModal}
         meal={randomMeal}
         cocktail={randomCocktail}
       />
