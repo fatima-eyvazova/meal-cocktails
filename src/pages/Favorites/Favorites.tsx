@@ -18,7 +18,7 @@ const Favorites: React.FC = () => {
   };
 
   if (favorites.length === 0) {
-    return <Typography variant="h6">No favorite products!</Typography>;
+    return <Typography variant="h6">No favorite products!!</Typography>;
   }
 
   return (
