@@ -3,13 +3,21 @@ export interface Meal {
   strMeal: string;
   strMealThumb: string;
   strInstructions: string;
+  strCategory?: string;
+  strArea?: string;
+  strIngredient1?: string;
 }
 
 export interface Cocktail {
   idDrink: string;
   strDrink: string;
   strDrinkThumb: string;
+  strCategory?: string;
+  strArea?: string;
+  strIngredient1?: string;
 }
+
+// export type CombinedItem = Meal | Cocktail;
 
 export type FavoriteItem = Meal | Cocktail;
 

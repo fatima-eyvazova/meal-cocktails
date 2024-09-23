@@ -113,17 +113,19 @@ const Home: React.FC = () => {
     let data = combinedData;
 
     if (!selectedCategory.includes("all") && selectedCategory.length > 0) {
-      data = data.filter((item) => selectedCategory.includes(item.strCategory));
+      data = data.filter((item) =>
+        selectedCategory.includes(item.strCategory!)
+      );
     }
     if (!selectedAreas.includes("all") && selectedAreas.length > 0) {
-      data = data.filter((item) => selectedAreas.includes(item.strArea));
+      data = data.filter((item) => selectedAreas.includes(item.strArea!));
     }
     if (
       !selectedIngredients.includes("all") &&
       selectedIngredients.length > 0
     ) {
       data = data.filter((item) =>
-        selectedIngredients.includes(item.strIngredient1)
+        selectedIngredients.includes(item.strIngredient1!)
       );
     }
 
