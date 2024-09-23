@@ -65,6 +65,8 @@ const Home: React.FC = () => {
 
   const handleGetRandom = async () => {
     setOpenModal(true);
+    setRandomMeal(null);
+    setRandomCocktail(null);
 
     await randomMealQuery.refetch();
     await randomCocktailQuery.refetch();
