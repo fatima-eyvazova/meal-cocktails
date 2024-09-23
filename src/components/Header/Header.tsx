@@ -1,11 +1,11 @@
 import React from "react";
 import { Box, Link } from "@mui/material";
-import SearchBar from "../../components/SearchBar/SearchBar";
 import CategorySelect from "../CategorySelect/CategorySelect";
 import AreaSelect from "../AreaSelect/AreaSelect";
 import IngredientSelect from "../IngredientSelect/IngredientSelect";
 import { HeaderContainer, LinkFavorites } from "../../constants";
 import { HeaderProps } from "../../types/productTypes";
+import SearchBar from "../SearchBar/SearchBar";
 
 const Header: React.FC<HeaderProps> = ({
   onSearch,

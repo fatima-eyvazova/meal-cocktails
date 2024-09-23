@@ -21,7 +21,7 @@ import { Button, CircularProgress, Box } from "@mui/material";
 import RandomModal from "../../components/RandomModal/RandomModal";
 import { HomeBox } from "../../constants";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@reduxjs/toolkit/query";
+import { RootState } from "../../store";
 import { addFavorite, removeFavorite } from "../../features/favoritesSlice";
 
 const Home: React.FC = () => {
@@ -86,18 +86,16 @@ const Home: React.FC = () => {
 
   const combinedIngredients = useMemo(() => {
     const mealIngredients =
-      mealIngredientsData?.meals
-        ?.map((item: { strIngredient: string }) => ({
-          strIngredient: item.strIngredient,
-        }))
-        .slice(0, 15) || [];
+      mealIngredientsData?.meals?.map((item: { strIngredient: string }) => ({
+        strIngredient: item.strIngredient,
+      })) || [];
 
     const cocktailIngredients =
-      cocktailIngredientsData?.drinks
-        ?.map((item: { strIngredient1: string }) => ({
+      cocktailIngredientsData?.drinks?.map(
+        (item: { strIngredient1: string }) => ({
           strIngredient: item.strIngredient1,
-        }))
-        .slice(0, 15) || [];
+        })
+      ) || [];
 
     return [...mealIngredients, ...cocktailIngredients];
   }, [mealIngredientsData, cocktailIngredientsData]);

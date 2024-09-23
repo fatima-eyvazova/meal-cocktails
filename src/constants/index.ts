@@ -133,3 +133,10 @@ export const FavoritesListStyle = {
   gap: 5,
   width: "80vw",
 };
+
+export const SearchBarList = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  width: "100%",
+};
