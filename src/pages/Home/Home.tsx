@@ -136,20 +136,9 @@ const Home: React.FC = () => {
     startIndex,
     startIndex + itemsPerPage
   );
-
   useEffect(() => {
-    if (
-      selectedCategory.length > 0 ||
-      selectedAreas.length > 0 ||
-      selectedIngredients.length > 0
-    ) {
-      if (mealsQuery.isFetched) {
-        mealsQuery.refetch();
-      }
-      if (cocktailsQuery.isFetched) {
-        cocktailsQuery.refetch();
-      }
-    }
+    mealsQuery.refetch();
+    cocktailsQuery.refetch();
   }, [selectedCategory, selectedAreas, selectedIngredients]);
 
   const handleAddFavorite = (item: any) => {
