@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { MEAL_BASE_URL } from "../config/apiConstants";
+import { MealResponse } from "../types/productTypes";
+
 export const mealSlice = createApi({
   reducerPath: "meal",
   baseQuery: fetchBaseQuery({
@@ -8,7 +10,7 @@ export const mealSlice = createApi({
   tagTypes: ["Meal", "MealCategories", "MealAreas", "MealIngredients"],
 
   endpoints: (builder) => ({
-    fetchMeals: builder.query({
+    fetchMeals: builder.query<MealResponse, string>({
       query: (searchQuery = "") => `search.php?s=${searchQuery}`,
       providesTags: (result) =>
         result?.meals

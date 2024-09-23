@@ -14,14 +14,19 @@ const renderSelectedValue = (selected: string[]) => {
   if (selected.includes("all")) return "all";
   return selected.length === 0 ? "None" : selected.join(", ");
 };
-type a = (event: SelectChangeEvent<string[]>, child: ReactNode) => void;
+
+type HandleChangeType = (
+  event: SelectChangeEvent<string[]>,
+  child: ReactNode
+) => void;
+
 const AreaSelect: React.FC<AreaSelectProps> = ({
   areas,
   selectedAreas,
   setSelectedAreas,
 }) => {
-  const handleAreaChange: a = (event) => {
-    const value = event?.target?.value;
+  const handleAreaChange: HandleChangeType = (event) => {
+    const value = event.target.value as string[];
 
     if (value.includes("all")) {
       setSelectedAreas(["all"]);
@@ -31,7 +36,6 @@ const AreaSelect: React.FC<AreaSelectProps> = ({
   };
 
   const filteredAreas = areas.filter((area) => area.strArea);
-
   const allSelected = selectedAreas.includes("all");
 
   return (

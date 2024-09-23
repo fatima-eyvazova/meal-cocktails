@@ -83,3 +83,23 @@ export interface RandomMealCocktailModalProps {
 export interface SearchBarProps {
   onSearch: (query: string) => void;
 }
+
+export interface Meal {
+  idMeal: string;
+  strMeal: string;
+  strMealThumb: string;
+}
+
+export interface MealResponse {
+  meals: Meal[];
+}
+
+export interface Cocktail {
+  idDrink: string;
+  strDrink: string;
+  strDrinkThumb: string;
+}
+
+export interface CocktailResponse {
+  drinks: Cocktail[];
+}

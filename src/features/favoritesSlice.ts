@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { FavoriteType } from "../types/productTypes";
 
 const initialFavorites = JSON.parse(localStorage.getItem("favorites") || "[]");
 
@@ -14,7 +15,7 @@ const favoritesSlice = createSlice({
     },
     removeFavorite: (state, action) => {
       state.favorites = state.favorites.filter(
-        (item) =>
+        (item: FavoriteType) =>
           item.idMeal !== action.payload && item.idDrink !== action.payload
       );
       localStorage.setItem("favorites", JSON.stringify(state.favorites));

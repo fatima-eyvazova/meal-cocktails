@@ -8,7 +8,7 @@ const Paginate: React.FC<PaginationProps> = ({
   totalPages,
   onPageChange,
 }) => {
-  const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
+  const handleChange = (_: unknown, page: number) => {
     onPageChange(page);
   };
 
